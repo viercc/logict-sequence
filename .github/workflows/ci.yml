@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        cabal: ["3.2"]
+        cabal: ["latest"]
         ghc:
           # This is kind of excessive, but gives us good information
           # about which versions we actually support. The list is
@@ -26,8 +26,7 @@ jobs:
           - "8.6.5"
           - "8.8.4"
           - "8.10.4"
-          - "9.0.1"
-          - latest
+          - "latest" # currently 9.0.1
         # exclude all non-linux builds and then
         # add back just a recent GHC for each
         # of windows and macOS. That way we get
