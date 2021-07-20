@@ -27,7 +27,7 @@ jobs:
           - "8.8.4"
           - "8.10.4"
           - "9.0.1"
-          - ghc-latest
+          - latest
         # exclude all non-linux builds and then
         # add back just a recent GHC for each
         # of windows and macOS. That way we get
@@ -35,9 +35,9 @@ jobs:
         # smoke test on macOS/windows.
         include:
           - os: macOS-latest
-            ghc: ghc-latest
+            ghc: latest
           - os: windows-latest
-            ghc: ghc-latest
+            ghc: latest
 
     steps:
     - uses: actions/checkout@v2
