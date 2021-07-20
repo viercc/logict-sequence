@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - ghc: 8.10.5
+          - ghc: 8.10.4
             allow-failure: false
           - ghc: 8.8.4
             allow-failure: false
@@ -134,16 +134,16 @@ jobs:
           find sdist -maxdepth 1 -type f -name '*.tar.gz' -exec tar -C $GITHUB_WORKSPACE/unpacked -xzvf {} \;
       - name: generate cabal.project
         run: |
-          PKGDIR_logict="$(find "$GITHUB_WORKSPACE/unpacked" -maxdepth 1 -type d -regex '.*/logict-[0-9.]*')"
+          PKGDIR_logict="$(find "$GITHUB_WORKSPACE/unpacked" -maxdepth 1 -type d -regex '.*/logict-sequence-[0-9.]*')"
           echo "PKGDIR_logict=${PKGDIR_logict}" >> $GITHUB_ENV
           touch cabal.project
           touch cabal.project.local
           echo "packages: ${PKGDIR_logict}" >> cabal.project
-          if [ $((HCNUMVER >= 80200)) -ne 0 ] ; then echo "package logict" >> cabal.project ; fi
+          if [ $((HCNUMVER >= 80200)) -ne 0 ] ; then echo "package logict-sequence" >> cabal.project ; fi
           if [ $((HCNUMVER >= 80200)) -ne 0 ] ; then echo "    ghc-options: -Werror=missing-methods" >> cabal.project ; fi
           cat >> cabal.project <<EOF
           EOF
-          $HCPKG list --simple-output --names-only | perl -ne 'for (split /\s+/) { print "constraints: $_ installed\n" unless /^(logict)$/; }' >> cabal.project.local
+          $HCPKG list --simple-output --names-only | perl -ne 'for (split /\s+/) { print "constraints: $_ installed\n" unless /^(logict-sequence)$/; }' >> cabal.project.local
           cat cabal.project
           cat cabal.project.local
       - name: dump install plan
