@@ -100,10 +100,10 @@ fromView = SeqT . singleton
 
 toView :: Monad m => SeqT m a -> m (Maybe (a, SeqT m a))
 toView (SeqT s) = case viewl s of
-  EmptyL -> pure Nothing
+  EmptyL -> return Nothing
   h S.:< t -> h >>= \x -> case x of
     Nothing -> toView (SeqT t)
-    Just (hi, SeqT ti) -> pure (Just (hi, SeqT (ti S.>< t)))
+    Just (hi, SeqT ti) -> return (Just (hi, SeqT (ti S.>< t)))
 
 single :: (MonadPlus mp, Monad m) => a -> m (Maybe (a, mp b))
 single a = return (Just (a, mzero))
@@ -119,7 +119,7 @@ instance Monad m => Alternative (SeqT m) where
   empty = SeqT (MSeq tempty)
   (toView -> m) <|> n = fromView (m >>= \x -> case x of
       Nothing -> toView n
-      Just (h,t) -> pure (Just (h, cat t n)))
+      Just (h,t) -> return (Just (h, cat t n)))
     where cat (SeqT l) (SeqT r) = SeqT (l S.>< r)
 
 instance Monad m => Monad (SeqT m) where
@@ -166,7 +166,7 @@ observeT :: Monad m => SeqT m a -> m a
 observeT :: MonadFail m => SeqT m a -> m a
 #endif
 observeT (toView -> m) = m >>= go where
-  go (Just (a, _)) = pure a
+  go (Just (a, _)) = return a
   go _ = fail "No results."
 
 observe :: Seq a -> a
@@ -176,8 +176,8 @@ observe (toView -> m) = case runIdentity m of
 
 observeMaybeT :: Monad m => SeqT m (Maybe a) -> m (Maybe a)
 observeMaybeT (toView -> m) = m >>= go where
-  go (Just (Just a, _)) = pure (Just a)
-  go _ = pure Nothing
+  go (Just (Just a, _)) = return (Just a)
+  go _ = return Nothing
 
 observeMaybe :: Seq (Maybe a) -> Maybe a
 observeMaybe = runIdentity . observeMaybeT
