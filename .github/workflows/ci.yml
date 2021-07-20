@@ -12,19 +12,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest]
         cabal: ["3.2"]
         ghc:
           # This is kind of excessive, but gives us good information
           # about which versions we actually support. The list is
-          # basically the old version 7, and then the newest point
-          # release after each major update.
-          - "7.0.1"
-          - "7.0.4"
-          - "7.2.2"
-          - "7.4.2"
-          - "7.6.3"
-          - "7.8.4"
+          # basically the oldest version of 7 that we can easily install,
+          # and then the newest point release after each major update.
           - "7.10.3"
           - "8.0.2"
           - "8.2.2"
@@ -33,19 +27,17 @@ jobs:
           - "8.8.4"
           - "8.10.4"
           - "9.0.1"
+          - ghc-latest
         # exclude all non-linux builds and then
         # add back just a recent GHC for each
         # of windows and macOS. That way we get
         # good version coverage on linux and a
         # smoke test on macOS/windows.
-        exclude:
-          - os: macOS-latest
-          - os: windows-latest
         include:
           - os: macOS-latest
-            ghc: 8.10.4
+            ghc: ghc-latest
           - os: windows-latest
-            ghc: 8.10.4
+            ghc: ghc-latest
 
     steps:
     - uses: actions/checkout@v2
