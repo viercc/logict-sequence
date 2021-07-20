@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        cabal: ["latest"]
+        cabal: [3.4]
         ghc:
           # This is kind of excessive, but gives us good information
           # about which versions we actually support. The list is
